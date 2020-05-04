@@ -30,6 +30,7 @@ namespace AppBlomsterButik
             OC_blomster.Add(new OrdreBlomst("Tulipan", 4, "Rød"));
             OC_blomster.Add(new OrdreBlomst("Tulipan", 3, "Hvid"));
             OC_blomster.Add(new OrdreBlomst("Tulipan", 2, "Gul"));
+            
 
             AddNyBlomst = new RelayCommand(AddBlomst);
 

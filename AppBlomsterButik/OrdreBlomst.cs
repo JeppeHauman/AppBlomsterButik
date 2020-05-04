@@ -32,7 +32,7 @@ namespace AppBlomsterButik
 			set { farve = value; }
 		}
 
-		public OrdreBlomst(string navn,int antal , string farve)
+		public OrdreBlomst(string navn, int antal, string farve)
 		{
 			this.Navn = navn;
 			this.Antal = antal;
@@ -41,7 +41,7 @@ namespace AppBlomsterButik
 		}
 		public OrdreBlomst()
 		{
-
+			
 		}
 
 	}
