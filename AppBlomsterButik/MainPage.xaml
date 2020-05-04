@@ -26,6 +26,7 @@
         <Button Command="{x:Bind ViewModel.AddNyBlomst,Mode=OneWay}" Content="Tilføj Blomst" Height="47" Margin="120,582,0,0" VerticalAlignment="Top" Width="110"/>
         <Button Command="{x:Bind ViewModel.SletSelectedBlomst,Mode=OneWay}" Content="Slet Blomst" Margin="120,632,0,0" VerticalAlignment="Top" Height="47" Width="110"/>
         <Button Command="{x:Bind ViewModel.SletBlomsterListe,Mode=OneWay}" Content="Slet Liste" Margin="120,682,0,0" VerticalAlignment="Top" Height="47" Width="110"/>
+        <Button Command="{x:Bind ViewModel.FemRoedeRoser,Mode=TwoWay}" Content="5 Røde Roser" Margin="301,582,0,0" VerticalAlignment="Top" Height="47" Width="110"/>
 
     </Grid>
 </Page>
