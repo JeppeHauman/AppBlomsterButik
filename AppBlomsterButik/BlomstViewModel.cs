@@ -22,6 +22,12 @@ namespace AppBlomsterButik
 
         public RelayCommand AddNyBlomst { get; set; }
 
+        public RelayCommand SletSelectedBlomst { get; set; }
+
+        public RelayCommand SletBlomsterListe { get; set; }
+
+        public OrdreBlomst SelctedOrdreBlomst { get; set; }
+
         public BlomstViewModel()
         {
             OC_blomster = new ObservableCollection<OrdreBlomst>();
@@ -33,6 +39,10 @@ namespace AppBlomsterButik
             
 
             AddNyBlomst = new RelayCommand(AddBlomst);
+            SletSelectedBlomst = new RelayCommand(SletBlomst, canDeleteBlomsterListe);
+            SletBlomsterListe = new RelayCommand(sletBlomsterListe, canDeleteBlomsterListe);
+
+            SelctedOrdreBlomst = new OrdreBlomst();
 
         }
 
@@ -44,8 +54,28 @@ namespace AppBlomsterButik
             OrdreBlomst oBlomst = new OrdreBlomst(NavnBlomst, AntalBlomst, FarveBlomst);
 
             OC_blomster.Add(oBlomst);
+            SletSelectedBlomst.RaiseCanExecuteChanged();
+            SletBlomsterListe.RaiseCanExecuteChanged();
         }
 
+        public void SletBlomst()
+        {
+            OC_blomster.Remove(SelctedOrdreBlomst);
+            SletSelectedBlomst.RaiseCanExecuteChanged();
+            SletBlomsterListe.RaiseCanExecuteChanged();
+        }
+
+        private void sletBlomsterListe()
+        {
+            OC_blomster.Clear();
+            SletSelectedBlomst.RaiseCanExecuteChanged();
+            SletBlomsterListe.RaiseCanExecuteChanged();
+        }
+
+        private bool canDeleteBlomsterListe()
+        {
+            return OC_blomster.Count > 0;
+        }
 
     }
 }
