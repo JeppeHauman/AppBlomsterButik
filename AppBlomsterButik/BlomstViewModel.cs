@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Popups;
 
 namespace AppBlomsterButik
 {
@@ -24,9 +26,7 @@ namespace AppBlomsterButik
         public int AntalBlomst { get => antalBlomst; set => antalBlomst = value; }
         public string FarveBlomst { get => farveBlomst; set => farveBlomst = value; }
 
-        public string JsonText { get; set; }
-        public string FileName { get; set; }
-        public StorageFolder LocalFolder { get; set; }
+        
 
         public RelayCommand AddNyBlomst { get; set; }
 
@@ -37,6 +37,22 @@ namespace AppBlomsterButik
         public OrdreBlomst SelctedOrdreBlomst { get; set; }
 
         public RelayCommand FemRoedeRoser { get; set; }
+
+        public RelayCommand Gem { get; set; }
+
+        public RelayCommand Hent { get; set; }
+
+        private string _jsontext;
+
+        public string Jsontext
+        {
+            get { return _jsontext; }
+            set { _jsontext = value; }
+        }
+
+        StorageFolder LocalFolder = null;
+        private readonly string FileName = "blomster.json";
+
 
         public BlomstViewModel()
         {
@@ -54,6 +70,10 @@ namespace AppBlomsterButik
             FemRoedeRoser = new RelayCommand(AddFemRoedeRoser);
 
             SelctedOrdreBlomst = new OrdreBlomst();
+
+            Gem = new RelayCommand(GemDataTilDiskAsync);
+
+            Hent = new RelayCommand(HentDataFraDiskAsync);
 
             LocalFolder = ApplicationData.Current.LocalFolder;
             FileName = "OrdreBlomst.json";
@@ -106,10 +126,37 @@ namespace AppBlomsterButik
             return json;
         }
 
-        private async void GemDataTilDiskAsync()
+        private void IndsaetJson(string jsonString)
         {
+            List<OrdreBlomst> NewList = JsonConvert.DeserializeObject<List<OrdreBlomst>>(Jsontext);
 
+            foreach (var item in NewList)
+            {
+                this.OC_blomster.Add(item);
+            }
         }
 
+        private async void GemDataTilDiskAsync()
+        {
+            this.Jsontext = GetJson();
+            StorageFile file = await LocalFolder.CreateFileAsync(FileName, CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(file, this.Jsontext);
+        }
+        
+        private async void HentDataFraDiskAsync()
+        {
+            try
+            {
+                StorageFile file = await LocalFolder.GetFileAsync(FileName);
+                string JsonText = await FileIO.ReadTextAsync(file);
+                this.OC_blomster.Clear();
+                //.IndsaetJson(JsonText);
+            }
+            catch (Exception)
+            {
+                MessageDialog messageDialog = new MessageDialog("Ændret filnavn eller har du ikke gemt ?", "File not found");
+                await messageDialog.ShowAsync();
+            }
+        }
     }
 }
