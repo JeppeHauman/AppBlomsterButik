@@ -1,10 +1,12 @@
 ﻿using BlomstViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace AppBlomsterButik
 {
@@ -14,11 +16,17 @@ namespace AppBlomsterButik
         private int antalBlomst;
         private string farveBlomst;
 
+        
+
         public ObservableCollection<OrdreBlomst> OC_blomster { get; set; }
 
         public string NavnBlomst { get => navnBlomst; set => navnBlomst = value; }
         public int AntalBlomst { get => antalBlomst; set => antalBlomst = value; }
         public string FarveBlomst { get => farveBlomst; set => farveBlomst = value; }
+
+        public string JsonText { get; set; }
+        public string FileName { get; set; }
+        public StorageFolder LocalFolder { get; set; }
 
         public RelayCommand AddNyBlomst { get; set; }
 
@@ -46,6 +54,9 @@ namespace AppBlomsterButik
             FemRoedeRoser = new RelayCommand(AddFemRoedeRoser);
 
             SelctedOrdreBlomst = new OrdreBlomst();
+
+            LocalFolder = ApplicationData.Current.LocalFolder;
+            FileName = "OrdreBlomst.json";
 
         }
 
@@ -87,6 +98,17 @@ namespace AppBlomsterButik
         private bool canDeleteBlomsterListe()
         {
             return OC_blomster.Count > 0;
+        }
+
+        private string GetJson()
+        {
+            string json = JsonConvert.SerializeObject(OC_blomster);
+            return json;
+        }
+
+        private async void GemDataTilDiskAsync()
+        {
+
         }
 
     }
